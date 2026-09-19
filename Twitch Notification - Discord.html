@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamer.bot Discord Live Notifier | Setup Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #11111b;
+            --bg-card: #1e1e2e;
+            --text-main: #cdd6f4;
+            --text-muted: #a6adc8;
+            --accent-twitch: #9146FF;
+            --accent-discord: #5865F2;
+            --accent-border: #313244;
+            --success: #a6e3a1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--accent-border);
+            padding-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-twitch), var(--accent-discord));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .step-title {
+            color: var(--success);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 24px;
+            background-color: var(--accent-discord);
+            border-radius: 4px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+            align-items: start;
+        }
+
+        .image-wrapper {
+            background: #11111b;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-border);
+            text-align: center;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            height: max-content;
+        }
+
+        .image-wrapper:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-discord);
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            cursor: zoom-in;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .image-wrapper.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .instruction-list {
+            margin-left: 20px;
+            color: var(--text-muted);
+        }
+
+        .instruction-list li {
+            margin-bottom: 10px;
+        }
+
+        .instruction-list strong {
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--accent-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Image Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 8px;
+            border: 1px solid var(--accent-border);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Discord Live Notifier Setup</h1>
+        <p>Follow these steps to configure your automated Twitch-to-Discord stream alerts.</p>
+    </header>
+
+    <div class="step-container">
+        
+        <!-- Preview Section -->
+        <div class="card">
+            <h2>What You Are Building</h2>
+            <p>Once set up, Streamer.bot will automatically post a dynamic live notification when your broadcast begins, and it will seamlessly update to a summary wrap-up when your broadcast ends.</p>
+            <div class="image-grid">
+                <div class="image-wrapper"><img src="images/1.jpg" alt="Live Notification" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper"><img src="images/2.jpg" alt="Offline Notification" onclick="openModal(this.src)"></div>
+            </div>
+        </div>
+
+        <!-- Phase 1: Webhook -->
+        <div class="card">
+            <span class="step-title">Phase 1</span>
+            <h2>Create a Discord Webhook</h2>
+            <ul class="instruction-list">
+                <li>Click your Discord server name at the top left to open the dropdown menu.</li>
+                <li>Select <strong>Server Settings</strong>.</li>
+                <li>Navigate to <strong>Integrations</strong> on the left sidebar.</li>
+                <li>Click on <strong>Webhooks</strong> or "Create Webhook".</li>
+                <li>Change the name, add a picture, select the channel where you want your live alerts to appear, then click <strong>Copy Webhook URL</strong>. Save this link for later.</li>
+            </ul>
+            <div class="image-grid">
+                <div class="image-wrapper"><img src="images/4.jpg" alt="Server Dropdown" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper"><img src="images/5.jpg" alt="Server Settings" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper full-width"><img src="images/6.jpg" alt="Integrations" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper full-width"><img src="images/7.jpg" alt="Webhooks" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper full-width"><img src="images/8.jpg" alt="Copy Webhook URL" onclick="openModal(this.src)"></div>
+            </div>
+        </div>
+
+        <!-- Phase 2: Role ID -->
+        <div class="card">
+            <span class="step-title">Phase 2</span>
+            <h2>Get Your Custom Role ID (Optional)</h2>
+            <ul class="instruction-list">
+                <li>While still in Server Settings, navigate to the <strong>Roles</strong> tab.</li>
+                <li>Find the specific role you want the bot to ping when you go live.</li>
+                <li>Click the three dots (<strong>...</strong>) next to the role and select <strong>Copy Role ID</strong>. Save this number for later. But if you don't want any role, it will mention <strong>@everyone</strong></li>
+            </ul>
+            <div class="image-grid">
+                <div class="image-wrapper full-width"><img src="images/9.jpg" alt="Copy Role ID" onclick="openModal(this.src)"></div>
+            </div>
+        </div>
+
+        <!-- Phase 3: Profile Logo -->
+        <div class="card">
+            <span class="step-title">Phase 3</span>
+            <h2>Get Your Twitch Profile Logo</h2>
+            <ul class="instruction-list">
+                <li>Go to your Twitch channel and click your profile picture icon in the top right corner.</li>
+                <li>Right-click the larger profile image that appears and select <strong>Copy image address</strong>. Save this link for later.</li>
+            </ul>
+            <div class="image-grid">
+                <div class="image-wrapper"><img src="images/10.jpg" alt="Click Profile" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper"><img src="images/11.jpg" alt="Copy Image Address" onclick="openModal(this.src)"></div>
+            </div>
+        </div>
+
+        <!-- Phase 4: Streamer.bot Configuration -->
+        <div class="card">
+            <span class="step-title">Phase 4</span>
+            <h2>Configure Streamer.bot Variables</h2>
+            <ul class="instruction-list">
+                <li>Open Streamer.bot, navigate to the <strong>Actions</strong> tab, and select the imported <strong>Twitch Notification</strong> action.</li>
+                <li>In the Sub-Actions window, locate and expand the green <strong>Setup</strong> folder.</li>
+                <li>Double-click each <strong>Set argument</strong> line to paste the information you gathered in the previous steps.</li>
+            </ul>
+            <div class="image-grid">
+                <div class="image-wrapper full-width"><img src="images/3.jpg" alt="Streamer.bot Actions Menu" onclick="openModal(this.src)"></div>
+                <div class="image-wrapper full-width"><img src="images/12.jpg" alt="Streamer.bot Setup Folder Variables" onclick="openModal(this.src)"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Developed By • Art's Cafe
+    </footer>
+</div>
+
+<!-- Fullscreen Image Modal -->
+<div id="imageModal" class="modal" onclick="closeModal()">
+    <img class="modal-content" id="expandedImg">
+</div>
+
+<script>
+    function openModal(imgSrc) {
+        var modal = document.getElementById("imageModal");
+        var expandedImg = document.getElementById("expandedImg");
+        modal.style.display = "block";
+        expandedImg.src = imgSrc;
+    }
+
+    function closeModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
+
+    // Close modal if escape key is pressed
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            closeModal();
+        }
+    });
+</script>
+
+</body>
+</html>
