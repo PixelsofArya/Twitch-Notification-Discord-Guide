@@ -157,6 +157,17 @@
             font-size: 0.9rem;
         }
 
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-twitch);
+        }
+
         /* Image Modal Styles */
         .modal {
             display: none;
@@ -213,7 +224,7 @@
                 <li>Select <strong>Server Settings</strong>.</li>
                 <li>Navigate to <strong>Integrations</strong> on the left sidebar.</li>
                 <li>Click on <strong>Webhooks</strong> or "Create Webhook".</li>
-                <li>Change the name, add a picture, select the channel where you want your live alerts to appear, then click <strong>Copy Webhook URL</strong>. Save this link for later.</li>
+                <li>Select the channel where you want your live alerts to appear, then click <strong>Copy Webhook URL</strong>. Save this link for later.</li>
             </ul>
             <div class="image-grid">
                 <div class="image-wrapper"><img src="images/4.jpg" alt="Server Dropdown" onclick="openModal(this.src)"></div>
@@ -231,7 +242,7 @@
             <ul class="instruction-list">
                 <li>While still in Server Settings, navigate to the <strong>Roles</strong> tab.</li>
                 <li>Find the specific role you want the bot to ping when you go live.</li>
-                <li>Click the three dots (<strong>...</strong>) next to the role and select <strong>Copy Role ID</strong>. Save this number for later. But if you don't want any role, it will mention <strong>@everyone</strong></li>
+                <li>Click the three dots (<strong>...</strong>) next to the role and select <strong>Copy Role ID</strong>. Save this number for later.</li>
             </ul>
             <div class="image-grid">
                 <div class="image-wrapper full-width"><img src="images/9.jpg" alt="Copy Role ID" onclick="openModal(this.src)"></div>
@@ -270,7 +281,7 @@
     </div>
 
     <footer>
-        Developed By • Art's Cafe
+        Developed By • <a href="https://guns.lol/aryadeepbarai" target="_blank" rel="noopener noreferrer">Aryadeep Barai AKA Call Me Art</a>
     </footer>
 </div>
 
